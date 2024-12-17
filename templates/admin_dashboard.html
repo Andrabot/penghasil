@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard Admin</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Player</th>
+                <th>Username</th>
+                <th>Coins</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td>{{ player[0] }}</td>
+                <td>{{ player[1] }}</td>
+                <td>{{ player[2] }}</td>
+                <td>
+                    <form method="POST" action="/admin/add_coins">
+                        <input type="hidden" name="player_id" value="{{ player[0] }}">
+                        <input type="number" name="coins" placeholder="Tambah Koin" required>
+                        <button type="submit">Tambah</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

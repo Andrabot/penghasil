@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Lomba Lari</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #FF9000, #EEEEEE);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 80%;
+  max-width: 800px;
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.profile {
+  position: relative;
+  top: -40px;
+  background: linear-gradient(90deg, #8C001A, #5F021F);
+  color: white;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+h1 {
+  text-align: center;
+  color: #8C001A;
+}
+
+.track {
+  position: relative;
+  margin: 20px 0;
+  height: 200px;
+  background: #EEEEEE;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 3px solid #5F021F;
+}
+
+.finish-line {
+  position: absolute;
+  top: 0;
+  right: 30px;
+  width: 10px;
+  height: 100%;
+  background: #FF9000;
+}
+
+.runner {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  font-size: 30px;
+  animation: running 0.5s infinite;
+}
+
+.red { top: 20px; }
+.blue { top: 70px; }
+.green { top: 120px; }
+.yellow { top: 170px; }
+
+.runner img {
+  width: 40px;
+  height: auto;
+}
+
+.buttons {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.runner-btn {
+  background-color: #FF9000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.runner-btn.active {
+  background-color: #5F021F;
+  color: black;
+}
+
+.runner-btn:hover {
+  background-color: #8C001A;
+}
+
+.start-btn {
+  display: block;
+  margin: 20px auto;
+  background-color: #8C001A;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.start-btn:hover {
+  background-color: #5F021F;
+}
+
+.bet-input {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.bet-input input {
+  width: 70px;
+  padding: 5px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #5F021F;
+}
+
+#result {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  left: 300px;
+  background-color: #FF9000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #8C001A;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  font-size: 18px;
+  text-align: center;
+  color: #8C001A;
+}
+
+.popup-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-content input {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.popup-content button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-popup {
+  background-color: #FF9000;
+  color: white;
+  margin-top: 10px;
+}
+
+.send-wa-btn {
+  background-color: #5F021F;
+  color: white;
+}
+
+.logout-btn, .game-btn {
+  position: relative;
+  background-color: #FF9000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover, .game-btn:hover {
+  background-color: #8C001A;
+}
+
+.logout-btn {
+  top: -20px;
+  left: -30px;
+}
+
+.game-btn {
+  top: -20px;
+  left: -30px;
+}
+
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="profile">
+    <img src="/static/images/profil.png" alt="User">
+    <div>Hallo {{ username }}, apakah anda siap bermain?</div>
+    <div>Coin anda: <span id="coins">{{ coins }}</span></div>
+</div>
+
+<div id="popup-form" class="popup hidden">
+  <div class="popup-content">
+    <h3>Isi Data Anda</h3>
+    <form id="wa-form">
+      <label for="name">Nama Akun:</label>
+      <input type="text" id="name" name="name" placeholder="Masukkan nama akun" required>
+
+      <label for="coins">Jumlah Koin:</label>
+      <input type="number" id="coins" name="coins" placeholder="Masukkan jumlah koin" required>
+
+      <button type="submit" class="send-wa-btn">Kirim ke WhatsApp</button>
+      <button type="button" class="close-popup">Batal</button>
+    </form>
+  </div>
+</div>
+
+<!-- Tombol di sebelah Logout -->
+<div class="button-container">
+<button id="open-popup" class="logout-btn">top-up</button>
+  <button onclick="location.href='/logout';" class="logout-btn">Logout</button>
+<button class="game-btn" onclick="window.location.href='game';">dapatkan coin</button>
+<!-- Tambahkan tombol untuk halaman withdraw -->
+<button onclick="window.location.href='/withdraw';" class="withdraw-btn">Withdraw</button>
+
+</div>
+
+  <h1>Taruhkan Dan Menangkan</h1>
+  <p>Pilih pelari favorit Anda dan pasang taruhan!</p>
+  <div class="buttons">
+    <button id="red" class="runner-btn">Merah</button>
+    <button id="blue" class="runner-btn">Biru</button>
+    <button id="green" class="runner-btn">Hijau</button>
+    <button id="yellow" class="runner-btn">yellow</button>
+  </div>
+  <div class="bet-input">
+    <label>Taruhan Koin:</label>
+    <input id="bet-amount" type="number" min="1" value="1">
+  </div>
+  <p id="selected-runner" style="text-align: center; font-size: 16px; font-weight: bold; color: #0984e3;">Pilihan Anda: -</p>
+  <div class="track">
+    <div class="finish-line"></div>
+    <div id="runner-red" class="runner red">
+      <img src="/static/images/run1-red.png" alt="Pelari Merah">
+    </div>
+    <div id="runner-blue" class="runner blue">
+      <img src="/static/images/run1-blue.png" alt="Pelari Biru">
+    </div>
+    <div id="runner-green" class="runner green">
+      <img src="/static/images/run1-green.png" alt="Pelari Hijau">
+    </div>
+    <div id="runner-yellow" class="runner yellow">
+      <img src="/static/images/run1-yellow.png" alt="Pelari yellow">
+    </div>
+  </div>
+  <button id="start-race" class="start-btn">Mulai Lomba</button>
+  <p id="result">Hasil: -</p>
+</div>
+  <script>
+    // JS yang sama dengan versi sebelumnya
+    let coins = parseInt("{{ coins }}");
+let selectedRunner = null;
+
+// Tambahkan logika untuk tombol
+document.querySelectorAll(".runner-btn").forEach(button => {
+  button.onclick = () => {
+    // Reset warna semua tombol
+    document.querySelectorAll(".runner-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    // Tambahkan kelas 'active' ke tombol yang diklik
+    button.classList.add("active");
+
+    // Simpan pelari yang dipilih
+    selectedRunner = button.id;
+
+    // Perbarui teks pilihan pengguna
+    const selectedText = button.innerText; // Ambil teks dari tombol
+    document.getElementById("selected-runner").innerText = `Pilihan Anda: ${selectedText}`;
+  };
+});
+
+
+document.getElementById("start-race").onclick = () => {
+  if (!selectedRunner) {
+    alert("Pilih pelari terlebih dahulu!");
+    return;
+  }
+
+  const betAmount = parseInt(document.getElementById("bet-amount").value, 10);
+  if (betAmount > coins || betAmount <= 0) {
+    alert("Taruhan tidak valid!");
+    return;
+  }
+
+  coins -= betAmount;
+  updateCoins(coins);
+
+  let raceFinished = false;
+  const finishLine = 340;
+
+  const runners = [
+    { id: "red", element: document.getElementById("runner-red"), position: 0 },
+    { id: "blue", element: document.getElementById("runner-blue"), position: 0 },
+    { id: "green", element: document.getElementById("runner-green"), position: 0 },
+    { id: "yellow", element: document.getElementById("runner-yellow"), position: 0 },
+  ];
+
+  // Reset posisi pelari ke awal
+  resetRace();
+
+  const raceInterval = setInterval(() => {
+    runners.forEach(runner => {
+      if (!raceFinished) {
+        runner.position += Math.random() * 10;
+        runner.element.style.left = `${runner.position}px`;
+
+        if (runner.position >= finishLine && !raceFinished) {
+          raceFinished = true;
+          clearInterval(raceInterval);
+
+          const winner = runner.id;
+          document.getElementById("result").innerText = `Pemenang: ${winner.toUpperCase()}!`;
+
+          if (selectedRunner === winner) {
+            const winnings = betAmount * 2;
+            coins += winnings;
+            updateCoins(coins);
+            alert(`Selamat! Anda menang ${winnings} koin.`);
+          } else {
+            alert("Sayang sekali, tebakan Anda salah.");
+          }
+
+          // Reset posisi pelari setelah beberapa saat
+          setTimeout(resetRace, 2000);
+        }
+      }
+    });
+  }, 100);
+};
+// Menampilkan popup saat tombol "Isi Data" diklik
+document.getElementById("open-popup").addEventListener("click", function () {
+  document.getElementById("popup-form").classList.remove("hidden");
+});
+
+// Menutup popup saat tombol "Batal" diklik
+document.querySelector(".close-popup").addEventListener("click", function () {
+  document.getElementById("popup-form").classList.add("hidden");
+});
+
+// Mengirim data ke WhatsApp
+document.getElementById("wa-form").addEventListener("submit", function (e) {
+  e.preventDefault(); // Mencegah refresh halaman
+
+  const name = document.getElementById("name").value;
+  const coins = document.getElementById("coins").value;
+
+  // Format pesan WhatsApp
+  const message = `Halo, berikut data saya:\nNama Akun: ${name}\nJumlah Koin: ${coins}`;
+
+  // Nomor WhatsApp tujuan
+  const phoneNumber = "628xxxxxxxxxx"; // Ganti dengan nomor Anda
+
+  // Membuka WhatsApp Web
+  const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  window.open(waLink, "_blank");
+
+  // Menutup popup setelah pengiriman
+  document.getElementById("popup-form").classList.add("hidden");
+});
+
+function resetRace() {
+  const runners = [
+    document.getElementById("runner-red"),
+    document.getElementById("runner-blue"),
+    document.getElementById("runner-green"),
+    document.getElementById("runner-yellow"),
+  ];
+
+  runners.forEach(runner => {
+    runner.style.left = "0px"; // Kembali ke posisi awal
+  });
+
+  document.getElementById("result").innerText = "Hasil: -";
+  selectedRunner = null; // Reset pilihan pelari
+  document.querySelectorAll(".runner-btn").forEach(btn => btn.classList.remove("active"));
+}
+
+function updateCoins(newCoins) {
+  fetch('/update_coins', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ coins: newCoins }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        document.getElementById("coins").innerText = data.coins;
+      } else {
+        alert("Gagal memperbarui koin di server.");
+      }
+    })
+    .catch(error => {
+      console.error("Error updating coins:", error);
+    });
+}
+
+      function animateRunner(runnerId, frames, interval) {
+        let currentFrame = 0;
+        const runnerImg = document.getElementById(runnerId).querySelector("img");
+
+        setInterval(() => {
+          currentFrame = (currentFrame + 1) % frames.length; // Berpindah frame
+          runnerImg.src = frames[currentFrame]; // Mengganti gambar
+        }, interval);
+      }
+      
+function logout() {
+  // Implementasi logout di sini (misalnya, mengarahkan ke halaman login)
+  window.location.href = "/logout";  // Contoh, sesuaikan dengan rute logout di server
+}
+      // Animasi untuk semua pelari
+      document.addEventListener("DOMContentLoaded", () => {
+        // Animasi pelari merah
+        animateRunner("runner-red", [
+          "/static/images/run1-red.png",
+          "/static/images/run2-red.png",
+          "/static/images/run3-red.png",
+          "/static/images/run4-red.png",
+          "/static/images/run5-red.png",
+        ], 150);
+
+        // Animasi pelari biru
+        animateRunner("runner-blue", [
+          "/static/images/run1-blue.png",
+          "/static/images/run2-blue.png",
+          "/static/images/run3-blue.png",
+          "/static/images/run4-blue.png",
+          "/static/images/run5-blue.png",
+        ], 150);
+
+        // Animasi pelari hijau
+        animateRunner("runner-green", [
+          "/static/images/run1-green.png",
+          "/static/images/run2-green.png",
+          "/static/images/run3-green.png",
+          "/static/images/run4-green.png",
+          "/static/images/run5-green.png",
+        ], 150);
+
+        // Animasi pelari yellow
+        animateRunner("runner-yellow", [
+          "/static/images/run1-yellow.png",
+          "/static/images/run2-yellow.png",
+          "/static/images/run3-yellow.png",
+          "/static/images/run4-yellow.png",
+          "/static/images/run5-yellow.png",
+        ], 150);
+      });
+  </script>
+</body>
+</html>

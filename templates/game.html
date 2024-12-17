@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game - Lomba Lari</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+/* Styling umum */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #FF9000, #5F021F); /* Gradasi warna oranye ke merah gelap */
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Container utama */
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+/* Deskripsi tambahan */
+.description {
+    font-size: 1em;
+    margin-bottom: 20px;
+    color: #FF9000; /* Warna oranye */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    line-height: 1.5;
+}
+
+/* Lingkaran animasi */
+.circle {
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, #990033, #8C001A); /* Warna gradasi merah */
+    border-radius: 50%;
+    margin: 30px auto;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 8px 20px rgba(140, 0, 26, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 25px rgba(140, 0, 26, 0.8);
+}
+
+/* Angka +1 */
+.added-coin {
+    position: absolute;
+    top: -20px;
+    font-size: 1.5em;
+    color: #FF9000; /* Warna oranye */
+    font-weight: bold;
+    opacity: 0;
+    animation: fadeUp 0.8s forwards;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Tombol navigasi */
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #FFFFFF;
+    background: #660000; /* Warna merah gelap */
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background: #990033; /* Warna merah terang */
+    transform: scale(1.05);
+}
+
+/* Responsivitas */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 15px;
+        width: 90%;
+    }
+
+    .circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    .btn {
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Selamat datang, {{ username }}!</h1>
+        <p>Koin Anda: <span id="coin-count">{{ coins }}</span></p>
+        <p class="description">
+            Cara mendapatkan koin:  
+            <ol style="text-align: left; margin: 10px auto; padding-left: 20px;">
+                <li>Klik lingkaran di bawah untuk menambah koin. Setiap klik akan menambahkan <strong>1 koin</strong> ke akun Anda.</li>
+                <li>Koin Anda akan langsung diperbarui dan tersimpan di akun.</li>
+                <li>Semakin banyak Anda klik, semakin banyak koin yang terkumpul!</li>
+                <li>Gunakan koin Anda untuk fitur menarik di halaman Dashboard!</li>
+            </ol>
+        </p>
+
+        <!-- Lingkaran yang akan bergetar saat diklik -->
+        <div class="circle" id="circle">
+            <div class="added-coin" id="coin-1">+1</div>
+        </div>
+
+        <!-- Tombol navigasi -->
+        <div class="btn-container">
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#circle').click(function(event) {
+                // Animasi getar
+                $(this).addClass('shake');
+                setTimeout(() => {
+                    $(this).removeClass('shake');
+                }, 400);
+
+                // Menambah koin
+                let currentCoins = parseInt($('#coin-count').text());
+                currentCoins += 1;
+                $('#coin-count').text(currentCoins);
+
+                // Menampilkan angka +1 di atas lingkaran
+                const coinMessage = $('#coin-1');
+                coinMessage.css({ opacity: 1 }).show();
+                setTimeout(() => {
+                    coinMessage.hide();
+                }, 800);
+
+                // Kirim AJAX untuk update koin ke server
+                $.ajax({
+                    url: '{{ url_for("update_coins") }}',
+                    type: 'POST',
+                    data: JSON.stringify({ coins: currentCoins }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        // Koin berhasil diperbarui
+                    },
+                    error: function(error) {
+                        alert('Terjadi kesalahan saat menambah koin.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

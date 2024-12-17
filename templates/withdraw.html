@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Coins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #660000;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #FF9000;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            color: #8C001A;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .info {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        form label {
+            font-weight: bold;
+            color: #8C001A;
+        }
+
+        form input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #660000;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #FF9000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        form button:hover {
+            background: #990033;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background: #8C001A;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table tbody tr:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        a {
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #FF9000;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #990033;
+        }
+
+        .coin-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .coin-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            justify-items: center;
+            margin-top: 10px;
+        }
+
+        .coin-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 100px;
+            border: 2px solid #FF9000;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .coin-box:hover {
+            background-color: #e8f5e9;
+            transform: scale(1.05);
+        }
+
+        .coin-box input[type="radio"] {
+            display: none;
+        }
+
+        .coin-box label {
+            cursor: pointer;
+            color: #5F021F;
+        }
+
+        .coin-box input[type="radio"]:checked + label {
+            color: #FF9000;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #FF9000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background: #990033;
+            transform: scale(1.05);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup-button {
+            padding: 10px 20px;
+            background: #FF9000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-button:hover {
+            background: #990033;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Withdraw Coins</h1>
+        <div class="info">
+            <p>Username: <strong>{{ username }}</strong></p>
+            <p>Total Coins: <strong>{{ total_coins }}</strong></p>
+        </div>
+
+        <form method="POST" class="coin-selection" id="withdrawForm">
+            <label for="coin_amount">Pilih Jumlah Koin:</label>
+            <div class="coin-options">
+                <div class="coin-box">
+                    <input type="radio" id="5000" name="coin_amount" value="5000" required>
+                    <label for="5000">5000 Koin = 50 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="10000" name="coin_amount" value="10000" required>
+                    <label for="10000">10000 Koin = 100 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="20000" name="coin_amount" value="20000" required>
+                    <label for="20000">20000 Koin = 200 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="50000" name="coin_amount" value="50000" required>
+                    <label for="50000">50000 Koin = 500 rupiah</label>
+                </div>
+            </div>
+
+            <!-- New 2x2 coin options -->
+            <div class="coin-options">
+                <div class="coin-box">
+                    <input type="radio" id="100000" name="coin_amount" value="100000" required>
+                    <label for="100000">100000 Koin = 1000 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="150000" name="coin_amount" value="150000" required>
+                    <label for="150000">150000 Koin = 1500 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="200000" name="coin_amount" value="200000" required>
+                    <label for="200000">200000 Koin = 2000 rupiah</label>
+                </div>
+                <div class="coin-box">
+                    <input type="radio" id="500000" name="coin_amount" value="500000" required>
+                    <label for="500000">500000 Koin = 5000 rupiah</label>
+                </div>
+            </div>
+                                <label for="500000">setelah berhasil withdraw, screenshot hasil transaksi dan kirim ke wa admin </label>
+            <a href="https://wa.me/yournumber?text=Masukkan%20kode%20atau%20pesan%20disini" target="_blank">
+    <button type="button" class="popup-button">Wa Admin </button>
+</a>
+            <button type="submit">Withdraw</button>
+        </form>
+
+        <h2>Riwayat Withdraw</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Jumlah Koin</th>
+                    <th>Waktu Transaksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in withdraw_history %}
+                <tr>
+                    <td>{{ history[0] }}</td>
+                    <td>{{ history[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('dashboard') }}">Kembali ke Dashboard</a>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2>Jumlah Koin Tidak Cukup!</h2>
+            <p>Maaf, jumlah koin yang Anda pilih melebihi saldo Anda saat ini. Silakan pilih jumlah yang lebih kecil.</p>
+            <button class="popup-button" onclick="closePopup()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('withdrawForm').addEventListener('submit', function(event) {
+            var selectedCoinAmount = document.querySelector('input[name="coin_amount"]:checked');
+            var currentCoins = {{ total_coins }};
+            
+            if (selectedCoinAmount && parseInt(selectedCoinAmount.value) > currentCoins) {
+                event.preventDefault();
+                document.getElementById('popup').style.display = 'flex';
+            }
+        });
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
